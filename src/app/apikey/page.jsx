@@ -36,7 +36,7 @@ export default function Page() {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.get("http://127.0.0.1:5000/apiKey", {
+      const response = await axios.get("https://major-project-production-a554.up.railway.app/apiKey", {
         params: { email },
       });
       setApiKey(response.data.api_key);

@@ -24,11 +24,11 @@ const Documentation = () => {
       angular: `import jsQR from 'jsqr';\n\nexport async function extractLinkFromImagePath(imagePath: string): Promise<string | null> {\n  const img = new Image();\n  img.src = imagePath;\n  await img.decode();\n  const canvas = document.createElement('canvas');\n  const ctx = canvas.getContext('2d');\n  canvas.width = img.width;\n  canvas.height = img.height;\n  ctx.drawImage(img, 0, 0, img.width, img.height);\n  const imageData = ctx.getImageData(0, 0, img.width, img.height);\n  return jsQR(imageData.data, img.width, img.height)?.data || null;\n}`,
     },
     sendRequest: {
-        react: `import axios from 'axios';\n\nasync function sendToBackend(url, email, api_key) {\n  try {\n    const response = await axios.post('http://127.0.0.1:5000/predict', { url, email, api_key });\n    return response.data;\n  } catch (error) {\n    console.error('Error:', error);\n  }\n}`,
+        react: `import axios from 'axios';\n\nasync function sendToBackend(url, email, api_key) {\n  try {\n    const response = await axios.post('https://major-project-production-a554.up.railway.app/predict', { url, email, api_key });\n    return response.data;\n  } catch (error) {\n    console.error('Error:', error);\n  }\n}`,
         
-        vue: `import axios from 'axios';\n\nexport async function sendToBackend(url, email, api_key) {\n  try {\n    const response = await axios.post('http://127.0.0.1:5000/predict', { url, email, api_key });\n    return response.data;\n  } catch (error) {\n    console.error('Error:', error);\n  }\n}`,
+        vue: `import axios from 'axios';\n\nexport async function sendToBackend(url, email, api_key) {\n  try {\n    const response = await axios.post('https://major-project-production-a554.up.railway.app/predict', { url, email, api_key });\n    return response.data;\n  } catch (error) {\n    console.error('Error:', error);\n  }\n}`,
         
-        angular: `import axios from 'axios';\n\nexport async function sendToBackend(url: string, email: string, api_key: string): Promise<any> {\n  try {\n    const response = await axios.post('http://127.0.0.1:5000/predict', { url, email, api_key });\n    return response.data;\n  } catch (error) {\n    console.error('Error:', error);\n  }\n}`,
+        angular: `import axios from 'axios';\n\nexport async function sendToBackend(url: string, email: string, api_key: string): Promise<any> {\n  try {\n    const response = await axios.post('https://major-project-production-a554.up.railway.app/predict', { url, email, api_key });\n    return response.data;\n  } catch (error) {\n    console.error('Error:', error);\n  }\n}`,
       }
       
   };
