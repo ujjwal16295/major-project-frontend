@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import jsQR from 'jsqr';
 import axios from 'axios';
 import Link from 'next/link';
+import { QrCode, Upload, AlertTriangle, CheckCircle, Home, FileText, RefreshCw } from 'lucide-react';
 
 export default function QrScanner() {
   const [url, setUrl] = useState('');
@@ -159,131 +160,143 @@ export default function QrScanner() {
 
   // Loading Spinner component
   const LoadingSpinner = () => (
-    <div className="w-full max-w-md p-4 flex justify-center items-center">
-      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-      <p className="ml-4 text-blue-600 font-medium">Analyzing URL...</p>
+    <div className="w-full flex justify-center items-center py-4">
+      <svg className="animate-spin -ml-1 mr-2 h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      </svg>
+      <span>Analyzing URL...</span>
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-gray-100 text-gray-900">
-      {/* Header Section */}
-      <section className="text-center py-12 px-6">
-        <h1 className="text-4xl font-bold text-blue-600">PhishShield Scanner</h1>
-        <p className="mt-4 text-lg text-gray-700 max-w-2xl mx-auto">
-          Scan QR codes in real-time or upload images to detect phishing attempts.
-        </p>
-      </section>
-      
-      {/* Scanner Section */}
-      <section className="py-8 px-6">
-        <div className="max-w-4xl mx-auto bg-white shadow-md rounded-lg p-6">
-          <h2 className="text-2xl font-semibold text-center mb-6">QR Code Scanner</h2>
-          
-          {/* Video Scanner */}
-          <div className="relative w-full max-w-md mx-auto mb-6">
-            <video 
-              ref={videoRef} 
-              className="w-full border-2 border-gray-300 rounded-lg shadow-sm" 
-              autoPlay 
-              playsInline 
-              muted
-            ></video>
-            <canvas ref={canvasRef} className="hidden"></canvas>
-            
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div className="border-4 border-blue-500 w-48 h-48 rounded opacity-60"></div>
-            </div>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-6">
+      <div className="max-w-md w-full rounded-2xl overflow-hidden shadow-2xl bg-white">
+        {/* Header */}
+        <div className="bg-gradient-to-r from-blue-600 to-indigo-700 px-8 py-12 text-center">
+          <div className="inline-flex justify-center items-center p-4 bg-white/20 rounded-full mb-4">
+            <QrCode size={32} className="text-white" />
           </div>
-          
-          {/* File Upload */}
-          <div className="w-full max-w-md mx-auto p-4 bg-gray-50 rounded-lg shadow-sm mb-6">
-            <label className="block text-lg font-semibold text-blue-600 mb-2">Upload QR Code Image:</label>
-            <input 
-              type="file" 
-              accept="image/*" 
-              onChange={handleFileUpload} 
-              className="block w-full text-sm border border-gray-300 rounded p-2 bg-white"
-              disabled={isLoading}
-            />
-          </div>
+          <h1 className="text-2xl font-bold text-white">PhishShield Scanner</h1>
+          <p className="text-blue-100 mt-2">Scan QR codes to detect phishing attempts</p>
+        </div>
 
-          {/* Results Section */}
-          <div className="max-w-md mx-auto space-y-4">
-            {/* URL Display */}
+        {/* Content */}
+        <div className="p-8">
+          {error && (
+            <div className="flex items-start p-4 rounded-lg bg-red-50 border border-red-100 text-red-800 mb-6">
+              <AlertTriangle size={20} className="text-red-500 mr-3 mt-0.5 flex-shrink-0" />
+              <p className="text-sm">{error}</p>
+            </div>
+          )}
+
+          <div className="space-y-6">
+            {/* Video Scanner */}
+            <div className="relative w-full rounded-lg overflow-hidden border border-gray-200 shadow-sm">
+              <video 
+                ref={videoRef} 
+                className="w-full h-64 object-cover" 
+                autoPlay 
+                playsInline 
+                muted
+              ></video>
+              <canvas ref={canvasRef} className="hidden"></canvas>
+              
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <div className="border-2 border-white w-40 h-40 rounded opacity-70"></div>
+              </div>
+            </div>
+
+            {/* File Upload */}
+            <div className="space-y-2">
+              <label className="text-gray-700 font-medium text-sm flex items-center">
+                <Upload size={16} className="mr-2 text-gray-500" />
+                Upload QR Code Image
+              </label>
+              <div className="relative">
+                <input 
+                  type="file"
+                  accept="image/*" 
+                  onChange={handleFileUpload}
+                  className="w-full p-3 pl-4 border border-gray-300 rounded-lg bg-gray-50 text-gray-700 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 transition-all"
+                  disabled={isLoading}
+                />
+              </div>
+            </div>
+
+            {/* Results Display */}
             {url && (
-              <div className="p-4 bg-blue-50 rounded-lg shadow-sm">
-                <p className="text-lg font-semibold text-blue-600">URL Detected:</p>
-                <p className="text-gray-700 break-words mt-1">{url}</p>
+              <div className="p-4 bg-blue-50 rounded-lg border border-blue-100">
+                <p className="text-sm font-medium text-gray-600">URL Detected:</p>
+                <p className="text-gray-700 break-words mt-1 text-sm">{url}</p>
               </div>
             )}
-            
-            {/* Loading Spinner */}
-            {isLoading && <LoadingSpinner />}
-            
-            {/* Analysis Results */}
+
+            {isLoading && (
+              <button
+                className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-medium py-3 px-4 rounded-lg transition-all shadow-md disabled:opacity-70 flex items-center justify-center"
+                disabled
+              >
+                <LoadingSpinner />
+              </button>
+            )}
+
             {result && !isLoading && (
-              <div className={`p-5 ${result.is_phishing ? 'bg-red-50' : 'bg-green-50'} rounded-lg shadow-sm`}>
-                <p className="text-xl font-bold mb-3 text-center">
-                  {result.is_phishing ? '⚠️ PHISHING DETECTED' : '✅ LEGITIMATE URL'}
-                </p>
+              <div className={`p-4 rounded-lg ${result.is_phishing ? 'bg-red-50 border border-red-100' : 'bg-green-50 border border-green-100'}`}>
+                <div className="flex items-center justify-center mb-3">
+                  {result.is_phishing ? (
+                    <AlertTriangle size={24} className="text-red-500 mr-2" />
+                  ) : (
+                    <CheckCircle size={24} className="text-green-500 mr-2" />
+                  )}
+                  <p className="text-lg font-bold text-black">
+                    {result.is_phishing ? 'PHISHING DETECTED' : 'LEGITIMATE URL'}
+                  </p>
+                </div>
+
                 <div className="space-y-2">
                   <div className="flex justify-between items-center p-2 bg-white bg-opacity-60 rounded">
-                    <p className="text-lg font-medium">Classification:</p>
-                    <p className={`font-bold ${result.is_phishing ? 'text-red-600' : 'text-green-600'}`}>
+                    <p className="text-sm font-medium text-black">Classification:</p>
+                    <p className={`font-bold text-sm ${result.is_phishing ? 'text-red-600' : 'text-green-600'}`}>
                       {result.classification}
                     </p>
                   </div>
                   <div className="flex justify-between items-center p-2 bg-white bg-opacity-60 rounded">
-                    <p className="text-lg font-medium">Confidence:</p>
-                    <p className="font-bold">{(result.confidence * 100).toFixed(2)}%</p>
+                    <p className="text-sm font-medium text-black">Confidence:</p>
+                    <p className="font-bold text-sm text-black">{(result.confidence * 100).toFixed(2)}%</p>
                   </div>
                 </div>
               </div>
             )}
-            
-            {/* Error Display */}
-            {error && !isLoading && (
-              <div className="p-4 bg-red-50 rounded-lg shadow-sm">
-                <p className="text-lg font-semibold text-red-600">Error:</p>
-                <p className="text-gray-700 mt-1">{error}</p>
-              </div>
-            )}
-            
+
             {/* Reset Button */}
-            <div className="flex justify-center mt-6">
-              <button
-                onClick={resetScanner}
-                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-transform transform hover:scale-105 shadow-md"
-                disabled={isLoading}
-              >
-                {isLoading ? 'Processing...' : 'Reset Scanner'}
-              </button>
-            </div>
+            <button
+              onClick={resetScanner}
+              className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium py-3 px-4 rounded-lg transition-all shadow-md hover:shadow-lg disabled:opacity-60 flex items-center justify-center"
+              disabled={isLoading}
+            >
+              <RefreshCw size={16} className="mr-2" />
+              {isLoading ? 'Processing...' : 'Reset Scanner'}
+            </button>
+          </div>
+
+          {/* Navigation Links */}
+          <div className="mt-8 pt-6 border-t border-gray-200 grid grid-cols-2 gap-4">
+            <Link href="/" className="block">
+              <div className="p-3 bg-gray-50 rounded-lg border border-gray-200 text-center hover:bg-gray-100 transition-all">
+                <Home size={18} className="mx-auto text-blue-600 mb-1" />
+                <p className="text-sm text-gray-700 font-medium">Home</p>
+              </div>
+            </Link>
+            <Link href="/documentation" className="block">
+              <div className="p-3 bg-gray-50 rounded-lg border border-gray-200 text-center hover:bg-gray-100 transition-all">
+                <FileText size={18} className="mx-auto text-blue-600 mb-1" />
+                <p className="text-sm text-gray-700 font-medium">Documentation</p>
+              </div>
+            </Link>
           </div>
         </div>
-      </section>
-      
-      {/* Navigation Links */}
-      <section className="py-8 px-6 flex justify-center space-x-6">
-        <Link href="/">
-          <div className="p-4 w-64 bg-white rounded-lg shadow-lg cursor-pointer transition-transform transform hover:scale-105">
-            <h3 className="text-xl font-semibold text-blue-600">🏠 Back to Home</h3>
-            <p className="text-gray-700 mt-2">
-              Return to the PhishShield homepage.
-            </p>
-          </div>
-        </Link>
-        
-        <Link href="/documentation">
-          <div className="p-4 w-64 bg-white rounded-lg shadow-lg cursor-pointer transition-transform transform hover:scale-105">
-            <h3 className="text-xl font-semibold text-green-600">📖 Documentation</h3>
-            <p className="text-gray-700 mt-2">
-              Learn how to integrate this QR scanner in your app.
-            </p>
-          </div>
-        </Link>
-      </section>
+      </div>
     </div>
   );
 }
