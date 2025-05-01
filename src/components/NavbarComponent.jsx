@@ -27,7 +27,8 @@ export default function NavbarComponent() {
     { name: "API Key", path: "/apikey" },
     { name: "Documentation", path: "/documentation" },
     { name: "Pricing", path: "/pricing" },
-    {name:"urlChecker",path:"/urlcheck"}
+    {name:"urlChecker",path:"/urlcheck"},
+    {name:"qrChecker",path:"/qrchecker"}
   ];
 
   return (
