@@ -250,7 +250,7 @@ export default function QrScanner() {
                     <CheckCircle size={24} className="text-green-500 mr-2" />
                   )}
                   <p className="text-lg font-bold text-black">
-                    {result.is_phishing ? 'PHISHING DETECTED' : 'LEGITIMATE URL'}
+                    {result.is_phishing ? 'UNSAFE URL' : 'LEGITIMATE URL'}
                   </p>
                 </div>
 
@@ -261,10 +261,10 @@ export default function QrScanner() {
                       {result.classification}
                     </p>
                   </div>
-                  <div className="flex justify-between items-center p-2 bg-white bg-opacity-60 rounded">
+                  {/* <div className="flex justify-between items-center p-2 bg-white bg-opacity-60 rounded">
                     <p className="text-sm font-medium text-black">Confidence:</p>
                     <p className="font-bold text-sm text-black">{(result.confidence * 100).toFixed(2)}%</p>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             )}

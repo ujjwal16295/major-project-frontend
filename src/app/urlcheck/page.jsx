@@ -140,7 +140,7 @@ const UrlSafetyChecker = () => {
                     </div>
                   </div>
                   
-                  {!result.is_safe && result.threat_categories && result.threat_categories.length > 0 && (
+                  {/* {!result.is_safe && result.threat_categories && result.threat_categories.length > 0 && (
                     <div className="mt-3 p-3 bg-white rounded">
                       <p className="text-sm font-medium text-gray-700 mb-2">Detected Threats:</p>
                       <ul className="space-y-1">
@@ -152,7 +152,7 @@ const UrlSafetyChecker = () => {
                         ))}
                       </ul>
                     </div>
-                  )}
+                  )} */}
                 </div>
               </div>
             </div>
